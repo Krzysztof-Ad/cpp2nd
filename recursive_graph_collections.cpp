@@ -6,6 +6,10 @@
 #include <unordered_map>
 #include <utility>
 
+#ifndef LEVEL_MAX
+#define LEVEL_MAX 4
+#endif
+
 // anonymous namespace for private helpers and data structures
 namespace {
     // our basic structure for the exercise
@@ -86,7 +90,7 @@ ssize_t rgc_graph_level(long id, char const *name) {
 }
 
 ssize_t rgc_max_level() {
-    return 0;
+    return LEVEL_MAX - 1;
 }
 
 ssize_t rgc_count_nodes(long id, char const *name) {
