@@ -1,5 +1,11 @@
 #include "recursive_graph_collections.h"
 
+// anonymous namespace for private helpers and data structures
+namespace {
+
+}
+
+
 namespace cxx {
 
 extern "C" {
