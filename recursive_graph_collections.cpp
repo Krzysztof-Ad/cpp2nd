@@ -1,8 +1,15 @@
 #include "recursive_graph_collections.h"
 
+#include <map>
+#include <set>
+#include <string>
+#include <unordered_map>
+#include <utility>
+
 // anonymous namespace for private helpers and data structures
 namespace {
-
+    // our basic structure for the exercise
+    std::unordered_map<long, std::map<std::string, std::map<int, std::set<std::pair<int, int>>>>> mp;
 }
 
 
