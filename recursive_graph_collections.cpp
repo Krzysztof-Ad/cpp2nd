@@ -156,9 +156,7 @@ int rgc_first_edge(long id, char const *name, int x) {
         return -1;
     }
 
-    auto neighborIt = neighbors.begin();
-
-    return neighborIt->first;
+    return neighbors.begin()->first;
 }
 
 int rgc_next_edge(long id, char const *name, int x, int y) {
