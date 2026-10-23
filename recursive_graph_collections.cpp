@@ -166,7 +166,12 @@ ssize_t rgc_count_edges(long id, char const *name) {
 }
 
 ssize_t rgc_size(long id) {
-    return 0;
+    auto collectionIt = collections.find(id);
+    if (collectionIt == collections.end()) {
+        return -1;
+    }
+
+    return collectionIt->second.size();
 }
 //   Krzysztof
 // =============
