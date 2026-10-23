@@ -201,7 +201,33 @@ bool rgc_replace_edge(long id, char const *result_name, char const *recipient_na
 // ==============================
 
 ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
-    return 0;
+    if (name == nullptr) return -1;
+
+    auto collectionIt = collections.find(id);
+    if (collectionIt == collections.end()) {
+        return -1;
+    }
+
+    auto graphIt = collectionIt->second.find(name);
+    if (graphIt == collectionIt->second.end()) {
+        return -1;
+    }
+
+    const Graph& graph = graphIt->second;
+
+    auto nodeIt = graph.find(x);
+    if (nodeIt == graph.end()) {
+        return -1;
+    }
+
+    const Neighbors& neighbors = nodeIt->second;
+    auto neighborIt = neighbors.upper_bound({y - 1, LEVEL_MAX - 1});
+    while (neighborIt != neighbors.end()) {
+        if (neighborIt->first == y) return neighborIt->second;
+        ++neighborIt;
+    }
+
+    return -1;
 }
 
 ssize_t rgc_graph_level(long id, char const *name) {
