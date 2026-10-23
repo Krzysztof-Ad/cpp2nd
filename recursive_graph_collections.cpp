@@ -145,12 +145,12 @@ int rgc_first_edge(long id, char const *name, int x) {
 
     const Graph& graph = graphIt->second;
 
-    auto edgeIt = graph.find(x);
-    if (edgeIt == graph.end()) {
+    auto nodeIt = graph.find(x);
+    if (nodeIt == graph.end()) {
         return -1;
     }
 
-    const Neighbors& neighbors = edgeIt->second;
+    const Neighbors& neighbors = nodeIt->second;
 
     if (neighbors.empty()) {
         return -1;
