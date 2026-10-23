@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <algorithm>
 
 #ifndef LEVEL_MAX
 #define LEVEL_MAX 4
@@ -230,7 +231,35 @@ ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
 }
 
 ssize_t rgc_graph_level(long id, char const *name) {
-    return 0;
+    if (name == nullptr) return -1;
+
+    auto collectionIt = collections.find(id);
+    if (collectionIt == collections.end()) {
+        return -1;
+    }
+
+    auto graphIt = collectionIt->second.find(name);
+
+    if (graphIt == collectionIt->second.end()) {
+        return -1;
+    }
+
+    const Graph& graph = graphIt->second;
+
+    EdgeLevel maxLevel = 0;
+    auto nodeIt = graph.begin();
+
+    while (nodeIt != graph.end()) {
+        const Neighbors& neighbors = nodeIt->second;
+        auto neighborIt = neighbors.begin();
+        while (neighborIt != neighbors.end()) {
+            maxLevel = std::max(maxLevel, neighborIt->second);
+            ++neighborIt;
+        }
+        ++nodeIt;
+    }
+
+    return maxLevel;
 }
 
 ssize_t rgc_max_level() {
