@@ -12,8 +12,19 @@
 
 // anonymous namespace for private helpers and data structures
 namespace {
+    using NodeID = int;
+    using EdgeLevel = int;
+    using Neighbor = std::pair<NodeID, EdgeLevel>;
+    using Neighbors = std::set<Neighbor>;
+    using Graph = std::map<NodeID, Neighbors>;
+    using Collection = std::map<std::string, Graph>;
+    using Collections = std::unordered_map<long, Collection>;
+
     // our basic structure for the exercise
-    std::unordered_map<long, std::map<std::string, std::map<int, std::set<std::pair<int, int>>>>> mp;
+    Collections collections;
+
+    // original structure for reference (without 'using' statements)
+    //std::unordered_map<long, std::map<std::string, std::map<int, std::set<std::pair<int, int>>>>> mp;
 }
 
 
