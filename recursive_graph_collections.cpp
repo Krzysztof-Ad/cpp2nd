@@ -87,6 +87,8 @@ char const * rgc_next_graph(long id, char const *name) {
 //      `
 
 int rgc_first_node(long id, char const *name) {
+    if (name == nullptr) return -1;
+
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
