@@ -181,10 +181,6 @@ int rgc_next_edge(long id, char const *name, int x, int y) {
 
     const Neighbors& neighbors = nodeIt->second;
 
-    if (neighbors.empty()) {
-        return -1;
-    }
-
     // Why does {y, LEVEL_MAX - 1} work? Because upper_bound searches
     // lexicographically through the set, so it will always find
     // a pair where NodeId is strictly greater than y
