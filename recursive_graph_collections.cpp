@@ -160,7 +160,41 @@ int rgc_first_edge(long id, char const *name, int x) {
 }
 
 int rgc_next_edge(long id, char const *name, int x, int y) {
-    return 0;
+    if (name == nullptr) return -1;
+
+    auto collectionIt = collections.find(id);
+    if (collectionIt == collections.end()) {
+        return -1;
+    }
+
+    auto graphIt = collectionIt->second.find(name);
+    if (graphIt == collectionIt->second.end()) {
+        return -1;
+    }
+
+    const Graph& graph = graphIt->second;
+
+    auto nodeIt = graph.find(x);
+    if (nodeIt == graph.end()) {
+        return -1;
+    }
+
+    const Neighbors& neighbors = nodeIt->second;
+
+    if (neighbors.empty()) {
+        return -1;
+    }
+
+    // Why does {y, LEVEL_MAX - 1} work? Because upper_bound searches
+    // lexicographically through the set, so it will always find
+    // a pair where NodeId is strictly greater than y
+    auto neighborIt = neighbors.upper_bound({y, LEVEL_MAX - 1});
+
+    if (neighborIt == neighbors.end()) {
+        return -1;
+    }
+
+    return neighborIt->first;
 }
 
 // ==============================
