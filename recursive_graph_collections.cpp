@@ -131,7 +131,34 @@ int rgc_next_node(long id, char const *name, int x) {
 }
 
 int rgc_first_edge(long id, char const *name, int x) {
-    return 0;
+    if (name == nullptr) return -1;
+
+    auto collectionIt = collections.find(id);
+    if (collectionIt == collections.end()) {
+        return -1;
+    }
+
+    auto graphIt = collectionIt->second.find(name);
+    if (graphIt == collectionIt->second.end()) {
+        return -1;
+    }
+
+    const Graph& graph = graphIt->second;
+
+    auto edgeIt = graph.find(x);
+    if (edgeIt == graph.end()) {
+        return -1;
+    }
+
+    const Neighbors& neighbors = edgeIt->second;
+
+    if (neighbors.empty()) {
+        return -1;
+    }
+
+    auto neighborIt = neighbors.begin();
+
+    return neighborIt->first;
 }
 
 int rgc_next_edge(long id, char const *name, int x, int y) {
