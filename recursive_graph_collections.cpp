@@ -32,6 +32,12 @@ namespace cxx {
 
 extern "C" {
 
+//    Antek
+//      |
+//      |
+//     \|/
+//      `
+
 long rgc_new_collection() {
     return 0;
 }
@@ -72,6 +78,14 @@ char const * rgc_next_graph(long id, char const *name) {
     return "";
 }
 
+//    Antek
+// =============
+//   Krzysztof
+//      |
+//      |
+//     \|/
+//      `
+
 int rgc_first_node(long id, char const *name) {
     return 0;
 }
@@ -88,9 +102,12 @@ int rgc_next_edge(long id, char const *name, int x, int y) {
     return 0;
 }
 
+// ==============================
+// Collaboration on this function
 bool rgc_replace_edge(long id, char const *result_name, char const *recipient_name, int w_1, int w_2, char const *donor_name, int v_1, int v_2) {
     return false;
 }
+// ==============================
 
 ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
     return 0;
@@ -115,6 +132,8 @@ ssize_t rgc_count_edges(long id, char const *name) {
 ssize_t rgc_size(long id) {
     return 0;
 }
+//   Krzysztof
+// =============
 }
 
 }
