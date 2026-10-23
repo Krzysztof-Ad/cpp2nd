@@ -242,9 +242,6 @@ ssize_t rgc_count_edges(long id, char const *name) {
     }
 
     const Graph& graph = graphIt->second;
-    if (graph.empty()) {
-        return 0;
-    }
 
     auto nodeIt = graph.begin();
     ssize_t degreeSum = 0;
