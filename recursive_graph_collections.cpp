@@ -221,13 +221,12 @@ ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
     }
 
     const Neighbors& neighbors = nodeIt->second;
-    auto neighborIt = neighbors.upper_bound({y - 1, LEVEL_MAX - 1});
-    while (neighborIt != neighbors.end()) {
-        if (neighborIt->first == y) return neighborIt->second;
-        ++neighborIt;
+    auto neighborIt = neighbors.lower_bound({y, 0});
+    if (neighborIt == neighbors.end() || neighborIt->first != y) {
+        return -1;
     }
 
-    return -1;
+    return neighborIt->second;
 }
 
 ssize_t rgc_graph_level(long id, char const *name) {
