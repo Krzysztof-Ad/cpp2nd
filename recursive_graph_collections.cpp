@@ -121,9 +121,6 @@ int rgc_next_node(long id, char const *name, int x) {
     }
 
     const Graph& graph = graphIt->second;
-    if (graph.empty()) {
-        return -1;
-    }
 
     auto nodeIt = graph.upper_bound(x);
     if (nodeIt == graph.end()) {
