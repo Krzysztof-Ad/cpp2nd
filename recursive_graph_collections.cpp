@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <utility>
 #include <algorithm>
+#include <climits>
 
 #ifndef LEVEL_MAX
 #define LEVEL_MAX 4
@@ -40,43 +41,297 @@ extern "C" {
 //      `
 
 long rgc_new_collection() {
-    return 0;
+    // Check if a static variable is sufficient
+    // and can replace a global one
+
+    static long next_id = 0;
+    
+    if (next_id < 0 ) {
+        return -1;
+    }
+
+    long current_id = next_id;
+    collections[current_id] = Collection();
+
+    if (next_id == LONG_MAX) {
+        next_id = -1;
+    }
+    else {
+        next_id++;
+    }
+
+    return current_id;
 }
 
 void rgc_delete_collection(long id) {
-
+    collections.erase(id);
 }
 
 bool rgc_new_graph(long id, char const *name, int n) {
-    return false;
+    if (n < 0 || name == nullptr) {
+        return false;
+    }
+
+    auto col_it = collections.find(id);
+
+    if (col_it == collections.end()) {
+        return false;
+    }
+
+    std::string graph_name(name);
+
+    // We cannot create a new graph when there is already one
+    // that has been given the same name in selected the collection
+
+    if (col_it->second.find(graph_name) != col_it->second.end()) {
+        return false;
+    }
+
+    Graph new_graph;
+
+    for (int i = 0; i < n; i++) {
+        new_graph[i] = Neighbors();
+    }
+
+    // There is no need to create a deep copy
+
+    col_it->second[graph_name] = std::move(new_graph);
+
+    return true; 
 }
 
 void rgc_delete_graph(long id, char const *name) {
+    auto col_it = collections.find(id);
 
+    if (col_it == collections.end() || name == nullptr) {
+        return;
+    }
+
+    col_it->second.erase(name);
 }
 
 int rgc_graph_new_node(long id, char const *name) {
-    return 0;
+    if (name == nullptr) {
+        return -1;
+    }
+
+    auto col_it = collections.find(id);
+
+    if (col_it == collections.end()) {
+        return -1;
+    }
+
+    auto graph_it = col_it->second.find(name);
+
+    // Return -1 if no graph has this name
+    
+    if (graph_it == col_it->second.end()) {
+        return -1;
+    }
+
+    Graph& graph = graph_it->second;
+
+    // It is forbidden to exceed the maximum size
+
+    if (graph.size() >= INT_MAX) {
+        return -1;
+    }
+
+    // TODO: It is important to verify if this approach for computing
+    // the minimum excluded element is sufficient. There are other ways
+    // that may yield a better time complexity, although at the expense
+    // of more memory usage.
+
+    int mex = 0;
+
+    for (auto const& [node_id, neighbors] : graph) {
+        if (node_id == mex) {
+            mex++;
+        }
+        else {
+            break; 
+        }
+    }
+
+    graph[mex] = Neighbors();
+    
+    return mex;
 }
 
 bool rgc_graph_delete_node(long id, char const *name, int x) {
-    return false;
+    // Check edge cases and remove the vertex
+    // otherwise report an error   
+    
+    if (name == nullptr) {
+        return false;
+    }
+
+    auto col_it = collections.find(id);
+
+    if (col_it == collections.end()) {
+        return false;
+    }
+
+    auto graph_it = col_it->second.find(name);
+
+    if (graph_it == col_it->second.end()) {
+        return false;
+    }
+
+    if (graph_it->second.find(x) == graph_it->second.end()) {
+        return false;
+    }
+
+    // TODO: erase all the edges and only then the vertex
+    // The edges are bidirectional so neighbors must be accounted for
+
+
+    return true;
 }
 
 bool rgc_graph_add_edge(long id, char const *name, int x, int y) {
-    return false;
+    // The graph must have a name
+    
+    if (name == nullptr) {
+        return false;
+    }
+
+    auto col_it = collections.find(id);
+
+    // There must be a collection with the given id
+
+    if (col_it == collections.end()) {
+        return false;
+    }
+
+    auto graph_it = col_it->second.find(name);
+
+    // There must be a graph named this way for the function
+    // to be able to modify it
+
+    if (graph_it == col_it->second.end()) {
+        return false;
+    }
+
+    Graph& graph = graph_it->second;
+    auto it_x = graph.find(x);
+    auto it_y = graph.find(y);
+
+    // Both vertices must be in the graph
+
+    if (it_x == graph.end() || it_y == graph.end()) {
+        return false;
+    }
+
+    // Checking if there already exists an edge
+
+    auto neighbor_it = it_x->second.lower_bound({y, 0});
+
+    if (neighbor_it != it_x->second.end() && neighbor_it->first == y) {
+        return false;
+    }
+
+    it_x->second.insert({y, 0});
+    it_y->second.insert({x, 0});
+
+    return true;
 }
 
 bool rgc_graph_delete_edge(long id, char const *name, int x, int y) {
-    return false;
+    // The graph must have a name
+    
+    if (name == nullptr) {
+        return false;
+    }
+
+    auto col_it = collections.find(id);
+
+    // There must be a collection with the given id
+
+    if (col_it == collections.end()) {
+        return false;
+    }
+
+    auto graph_it = col_it->second.find(name);
+
+    // There must be a graph named this way for the function
+    // to be able to modify it
+
+    if (graph_it == col_it->second.end()) {
+        return false;
+    }
+
+    Graph& graph = graph_it->second;
+    auto it_x = graph.find(x);
+    auto it_y = graph.find(y);
+
+    // Both vertices must be in the graph
+
+    if (it_x == graph.end() || it_y == graph.end()) {
+        return false;
+    }
+
+    // Checking if there already exists an edge
+    // IMPORTANT: If something goes south and the edges have not been
+    // added symetrically, there may be an error regarding erasing
+
+    auto neighbor_it = it_x->second.lower_bound({y, 0});
+
+    if (neighbor_it == it_x->second.end()) {
+        return false;
+    }
+
+    if (neighbor_it->first != y) {
+        return false;
+    }
+
+    it_x->second.erase(neighbor_it);
+    it_y->second.erase(it_y->second.lower_bound({x, 0}));
+
+    return true;
 }
 
 char const * rgc_first_graph(long id) {
-    return "";
+    auto col_it = collections.find(id);
+
+    // There is no first graph if there is no such collection
+    // or the collection with the given id is empty
+
+    if (col_it == collections.end() || col_it->second.empty()) {
+        return nullptr;
+    }
+
+    return col_it->second.begin()->first.c_str();
 }
 
 char const * rgc_next_graph(long id, char const *name) {
-    return "";
+    if (name == nullptr) {
+        return nullptr;
+    }
+
+    auto col_it = collections.find(id);
+
+    if (col_it == collections.end() || col_it->second.empty()) {
+        return nullptr;
+    }
+
+    auto graph_it = col_it->second.find(name);
+
+    // If there is no such name then there is no successor of this name
+
+    if (graph_it == col_it->second.end()) {
+        return nullptr;
+    }
+
+    ++graph_it;
+
+    // If the successor does not exist then it cannot be returned
+
+    if (graph_it == col_it->second.end()) {
+        return nullptr;
+    }
+
+    return graph_it->first.c_str();
 }
 
 //    Antek
