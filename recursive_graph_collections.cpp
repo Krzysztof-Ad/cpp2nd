@@ -28,6 +28,23 @@ namespace {
         return collections;
     }
 
+    Graph* find_graph(long id, char const *name) {
+        if (name == nullptr) return nullptr;
+
+        Collections collections = get_collections();
+
+        auto collectionIt = collections.find(id);
+        if (collectionIt == collections.end()) {
+            return nullptr;
+        }
+
+        auto graphIt = collectionIt->second.find(name);
+        if (graphIt == collectionIt->second.end()) {
+            return nullptr;
+        }
+
+        return &graphIt->second;
+    }
 }
 
 
