@@ -210,7 +210,36 @@ bool rgc_graph_add_edge(long id, char const *name, int x, int y) {
 }
 
 bool rgc_graph_delete_edge(long id, char const *name, int x, int y) {
-    return false;
+    if (x == y) {
+        return false;
+    }
+
+    Graph* graph = find_graph(id, name);
+    if (graph == nullptr) {
+        return false;
+    }
+
+    auto nodeX = graph->find(x);
+    auto nodeY = graph->find(y);
+
+    if (nodeX == graph->end() || nodeY == graph->end()) {
+        return false;
+    }
+
+    auto neighborXY = find_neighbor(nodeX->second, y);
+    if (neighborXY == nodeX->second.end()) {
+        return false;
+    }
+
+    auto neighborYX = find_neighbor(nodeY->second, x);
+    if (neighborYX == nodeY->second.end()) {
+        return false;
+    }
+
+    nodeX->second.erase(neighborXY);
+    nodeY->second.erase(neighborYX);
+
+    return true;
 }
 
 char const * rgc_first_graph(long id) {
