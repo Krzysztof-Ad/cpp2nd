@@ -107,25 +107,13 @@ char const * rgc_next_graph(long id, char const *name) {
 //      `
 
 int rgc_first_node(long id, char const *name) {
-    if (name == nullptr) return -1;
+    const Graph* graph = find_graph(id, name);
 
-    Collections collections = get_collections();
-    auto collectionIt = collections.find(id);
-    if (collectionIt == collections.end()) {
+    if (graph == nullptr || graph->empty()) {
         return -1;
     }
 
-    auto graphIt = collectionIt->second.find(name);
-    if (graphIt == collectionIt->second.end()) {
-        return -1;
-    }
-
-    const Graph& graph = graphIt->second;
-    if (graph.empty()) {
-        return -1;
-    }
-
-    return graph.begin()->first;
+    return graph->begin()->first;
 }
 
 int rgc_next_node(long id, char const *name, int x) {
