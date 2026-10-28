@@ -129,6 +129,10 @@ int rgc_first_node(long id, char const *name) {
 int rgc_next_node(long id, char const *name, int x) {
     const Graph* graph = find_graph(id, name);
 
+    if (graph == nullptr || graph->empty()) {
+        return -1;
+    }
+
     auto nodeIt = graph->upper_bound(x);
     if (nodeIt == graph->end()) {
         return -1;
@@ -139,6 +143,10 @@ int rgc_next_node(long id, char const *name, int x) {
 
 int rgc_first_edge(long id, char const *name, int x) {
     const Graph* graph = find_graph(id, name);
+
+    if (graph == nullptr || graph->empty()) {
+        return -1;
+    }
 
     auto nodeIt = graph->find(x);
     if (nodeIt == graph->end()) {
@@ -156,6 +164,10 @@ int rgc_first_edge(long id, char const *name, int x) {
 
 int rgc_next_edge(long id, char const *name, int x, int y) {
     const Graph* graph = find_graph(id, name);
+
+    if (graph == nullptr || graph->empty()) {
+        return -1;
+    }
 
     auto nodeIt = graph->find(x);
     if (nodeIt == graph->end()) {
@@ -186,6 +198,10 @@ bool rgc_replace_edge(long id, char const *result_name, char const *recipient_na
 ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
     const Graph* graph = find_graph(id, name);
 
+    if (graph == nullptr || graph->empty()) {
+        return -1;
+    }
+
     auto nodeIt = graph->find(x);
     if (nodeIt == graph->end()) {
         return -1;
@@ -202,6 +218,10 @@ ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
 
 ssize_t rgc_graph_level(long id, char const *name) {
     const Graph* graph = find_graph(id, name);
+
+    if (graph == nullptr) {
+        return -1;
+    }
 
     EdgeLevel maxLevel = 0;
     auto nodeIt = graph->begin();
@@ -242,6 +262,10 @@ ssize_t rgc_count_nodes(long id, char const *name) {
 
 ssize_t rgc_count_edges(long id, char const *name) {
     const Graph* graph = find_graph(id, name);
+
+    if (graph == nullptr) {
+        return -1;
+    }
 
     auto nodeIt = graph->begin();
     ssize_t degreeSum = 0;
