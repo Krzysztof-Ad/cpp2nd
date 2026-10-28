@@ -172,7 +172,15 @@ bool rgc_graph_delete_edge(long id, char const *name, int x, int y) {
 }
 
 char const * rgc_first_graph(long id) {
-    return "";
+    const auto& collections = get_collections();
+
+    auto collectionIt = collections.find(id);
+    if (collectionIt == collections.end() ||
+        collectionIt->second.empty()) {
+        return nullptr;
+        }
+
+    return collectionIt->second.begin()->first.c_str();
 }
 
 char const * rgc_next_graph(long id, char const *name) {
