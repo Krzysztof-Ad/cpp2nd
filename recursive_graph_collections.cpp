@@ -45,6 +45,16 @@ namespace {
 
         return &graphIt->second;
     }
+
+    auto find_neighbor(const Neighbors& neighbors, NodeID id) {
+        auto neighborIt = neighbors.lower_bound({id, 0});
+
+        if (neighborIt != neighbors.end() && neighborIt->first == id) {
+            return neighborIt;
+        }
+
+        return neighbors.end();
+    }
 }
 
 
