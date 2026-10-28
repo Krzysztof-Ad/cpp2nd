@@ -129,7 +129,7 @@ int rgc_first_node(long id, char const *name) {
 int rgc_next_node(long id, char const *name, int x) {
     const Graph* graph = find_graph(id, name);
 
-    if (graph == nullptr || graph->empty()) {
+    if (graph == nullptr) {
         return -1;
     }
 
@@ -144,7 +144,7 @@ int rgc_next_node(long id, char const *name, int x) {
 int rgc_first_edge(long id, char const *name, int x) {
     const Graph* graph = find_graph(id, name);
 
-    if (graph == nullptr || graph->empty()) {
+    if (graph == nullptr) {
         return -1;
     }
 
@@ -165,7 +165,7 @@ int rgc_first_edge(long id, char const *name, int x) {
 int rgc_next_edge(long id, char const *name, int x, int y) {
     const Graph* graph = find_graph(id, name);
 
-    if (graph == nullptr || graph->empty()) {
+    if (graph == nullptr) {
         return -1;
     }
 
@@ -198,7 +198,7 @@ bool rgc_replace_edge(long id, char const *result_name, char const *recipient_na
 ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
     const Graph* graph = find_graph(id, name);
 
-    if (graph == nullptr || graph->empty()) {
+    if (graph == nullptr) {
         return -1;
     }
 
