@@ -156,7 +156,24 @@ void rgc_delete_graph(long id, char const *name) {
 }
 
 int rgc_graph_new_node(long id, char const *name) {
-    return 0;
+    Graph* graph = find_graph(id, name);
+
+    if (graph == nullptr || graph->size() >= INT_MAX) {
+        return -1;
+    }
+
+    NodeID mex = 0;
+
+    for (const auto& node : *graph) {
+        if (node.first != mex) {
+            break;
+        }
+        ++mex;
+    }
+
+    graph->try_emplace(mex);
+
+    return mex;
 }
 
 bool rgc_graph_delete_node(long id, char const *name, int x) {
