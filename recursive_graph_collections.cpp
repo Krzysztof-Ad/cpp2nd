@@ -231,24 +231,11 @@ ssize_t rgc_count_nodes(long id, char const *name) {
 }
 
 ssize_t rgc_count_edges(long id, char const *name) {
-    if (name == nullptr) return -1;
+    const Graph* graph = find_graph(id, name);
 
-    Collections collections = get_collections();
-    auto collectionIt = collections.find(id);
-    if (collectionIt == collections.end()) {
-        return -1;
-    }
-
-    auto graphIt = collectionIt->second.find(name);
-    if (graphIt == collectionIt->second.end()) {
-        return -1;
-    }
-
-    const Graph& graph = graphIt->second;
-
-    auto nodeIt = graph.begin();
+    auto nodeIt = graph->begin();
     ssize_t degreeSum = 0;
-    while (nodeIt != graph.end()) {
+    while (nodeIt != graph->end()) {
         const Neighbors& neighbors = nodeIt->second;
         degreeSum += neighbors.size();
         ++nodeIt;
