@@ -21,8 +21,12 @@ namespace {
     using Collection = std::map<std::string, Graph>;
     using Collections = std::unordered_map<long, Collection>;
 
-    // our basic structure for the exercise
-    Collections collections;
+    // our basic structure for the exercise;
+    // we use getter instead of global initialization
+    Collections& get_collections() {
+        static Collections collections;
+        return collections;
+    }
 
     // original structure for reference (without 'using' statements)
     //std::unordered_map<long, std::map<std::string, std::map<int, std::set<std::pair<int, int>>>>> mp;
