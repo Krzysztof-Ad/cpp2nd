@@ -94,6 +94,7 @@ char const * rgc_next_graph(long id, char const *name) {
 int rgc_first_node(long id, char const *name) {
     if (name == nullptr) return -1;
 
+    Collections collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
@@ -115,6 +116,7 @@ int rgc_first_node(long id, char const *name) {
 int rgc_next_node(long id, char const *name, int x) {
     if (name == nullptr) return -1;
 
+    Collections collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
@@ -138,6 +140,7 @@ int rgc_next_node(long id, char const *name, int x) {
 int rgc_first_edge(long id, char const *name, int x) {
     if (name == nullptr) return -1;
 
+    Collections collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
@@ -167,6 +170,7 @@ int rgc_first_edge(long id, char const *name, int x) {
 int rgc_next_edge(long id, char const *name, int x, int y) {
     if (name == nullptr) return -1;
 
+    Collections collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
@@ -208,6 +212,7 @@ bool rgc_replace_edge(long id, char const *result_name, char const *recipient_na
 ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
     if (name == nullptr) return -1;
 
+    Collections collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
@@ -237,6 +242,7 @@ ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
 ssize_t rgc_graph_level(long id, char const *name) {
     if (name == nullptr) return -1;
 
+    Collections collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
@@ -273,6 +279,7 @@ ssize_t rgc_max_level() {
 ssize_t rgc_count_nodes(long id, char const *name) {
     if (name == nullptr) return -1;
 
+    Collections collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
@@ -289,6 +296,7 @@ ssize_t rgc_count_nodes(long id, char const *name) {
 ssize_t rgc_count_edges(long id, char const *name) {
     if (name == nullptr) return -1;
 
+    Collections collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
@@ -313,6 +321,7 @@ ssize_t rgc_count_edges(long id, char const *name) {
 }
 
 ssize_t rgc_size(long id) {
+    Collections collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
