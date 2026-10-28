@@ -112,8 +112,32 @@ void rgc_delete_collection(long id) {
     get_collections().erase(id);
 }
 
-bool rgc_new_graph(long id, char const *name, int n) {
-    return false;
+bool rgc_new_graph(long id, char const* name, int n) {
+    if (n < 0 || !valid_graph_name(name)) {
+        return false;
+    }
+
+    Collections& collections = get_collections();
+
+    auto collectionIt = collections.find(id);
+    if (collectionIt == collections.end()) {
+        return false;
+    }
+
+    auto [graphIt, inserted] =
+        collectionIt->second.try_emplace(std::string(name));
+
+    if (!inserted) {
+        return false;
+    }
+
+    Graph& graph = graphIt->second;
+
+    for (int i = 0; i < n; ++i) {
+        graph.try_emplace(i);
+    }
+
+    return true;
 }
 
 void rgc_delete_graph(long id, char const *name) {
