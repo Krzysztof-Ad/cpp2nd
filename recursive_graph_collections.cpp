@@ -177,7 +177,24 @@ int rgc_graph_new_node(long id, char const *name) {
 }
 
 bool rgc_graph_delete_node(long id, char const *name, int x) {
-    return false;
+    Graph* graph = find_graph(id, name);
+    if (graph == nullptr) {
+        return false;
+    }
+
+    auto nodeIt = graph->find(x);
+    if (nodeIt == graph->end()) {
+        return false;
+    }
+
+    for (const auto& [neighborId, level] : nodeIt->second) {
+        auto neighborIt = graph->find(neighborId);
+        neighborIt->second.erase({x, level});
+    }
+
+    graph->erase(nodeIt);
+
+    return true;
 }
 
 bool rgc_graph_add_edge(long id, char const *name, int x, int y) {
