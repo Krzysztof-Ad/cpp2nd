@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <utility>
 #include <algorithm>
+#include <climits>
 
 #ifndef LEVEL_MAX
 #define LEVEL_MAX 4
@@ -69,7 +70,23 @@ extern "C" {
 //      `
 
 long rgc_new_collection() {
-    return 0;
+    static long nextId = 0;
+
+    if (nextId < 0) {
+        return -1;
+    }
+
+    long currentId = nextId;
+
+    get_collections().try_emplace(currentId);
+
+    if (nextId == LONG_MAX) {
+        nextId = -1;
+    } else {
+        ++nextId;
+    }
+
+    return currentId;
 }
 
 void rgc_delete_collection(long id) {
