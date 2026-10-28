@@ -184,7 +184,31 @@ char const * rgc_first_graph(long id) {
 }
 
 char const * rgc_next_graph(long id, char const *name) {
-    return "";
+    if (name == nullptr) {
+        return nullptr;
+    }
+
+    const auto& collections = get_collections();
+
+    auto collectionIt = collections.find(id);
+    if (collectionIt == collections.end()) {
+        return nullptr;
+    }
+
+    const Collection& collection = collectionIt->second;
+
+    auto graphIt = collection.find(name);
+    if (graphIt == collection.end()) {
+        return nullptr;
+    }
+
+    ++graphIt;
+
+    if (graphIt == collection.end()) {
+        return nullptr;
+    }
+
+    return graphIt->first.c_str();
 }
 
 //    Antek
