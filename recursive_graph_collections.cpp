@@ -56,6 +56,25 @@ namespace {
 
         return neighbors.end();
     }
+
+    bool valid_graph_name(char const* name) {
+        if (name == nullptr || *name == '\0') {
+            return false;
+        }
+
+        for (auto p = name; *p != '\0'; ++p) {
+            char c = *p;
+
+            if (!((c >= 'a' && c <= 'z') ||
+                  (c >= 'A' && c <= 'Z') ||
+                  (c >= '0' && c <= '9') ||
+                  c == '_')) {
+                return false;
+                  }
+        }
+
+        return true;
+    }
 }
 
 
