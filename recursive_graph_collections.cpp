@@ -141,7 +141,18 @@ bool rgc_new_graph(long id, char const* name, int n) {
 }
 
 void rgc_delete_graph(long id, char const *name) {
+    if (name == nullptr) {
+        return;
+    }
 
+    auto& collections = get_collections();
+
+    auto collectionIt = collections.find(id);
+    if (collectionIt == collections.end()) {
+        return;
+    }
+
+    collectionIt->second.erase(name);
 }
 
 int rgc_graph_new_node(long id, char const *name) {
