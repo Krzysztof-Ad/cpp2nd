@@ -244,20 +244,13 @@ ssize_t rgc_max_level() {
 }
 
 ssize_t rgc_count_nodes(long id, char const *name) {
-    if (name == nullptr) return -1;
+    const Graph* graph = find_graph(id, name);
 
-    Collections& collections = get_collections();
-    auto collectionIt = collections.find(id);
-    if (collectionIt == collections.end()) {
+    if (graph == nullptr) {
         return -1;
     }
 
-    auto graphIt = collectionIt->second.find(name);
-    if (graphIt == collectionIt->second.end()) {
-        return -1;
-    }
-
-    return graphIt->second.size();
+    return graph->size();
 }
 
 ssize_t rgc_count_edges(long id, char const *name) {
