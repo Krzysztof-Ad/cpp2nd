@@ -208,8 +208,9 @@ ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
     }
 
     const Neighbors& neighbors = nodeIt->second;
-    auto neighborIt = neighbors.lower_bound({y, 0});
-    if (neighborIt == neighbors.end() || neighborIt->first != y) {
+    auto neighborIt = find_neighbor(neighbors, y);
+
+    if (neighborIt == neighbors.end()) {
         return -1;
     }
 
