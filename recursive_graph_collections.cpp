@@ -31,7 +31,7 @@ namespace {
     Graph* find_graph(long id, char const *name) {
         if (name == nullptr) return nullptr;
 
-        Collections collections = get_collections();
+        Collections& collections = get_collections();
 
         auto collectionIt = collections.find(id);
         if (collectionIt == collections.end()) {
@@ -226,7 +226,7 @@ ssize_t rgc_max_level() {
 ssize_t rgc_count_nodes(long id, char const *name) {
     if (name == nullptr) return -1;
 
-    Collections collections = get_collections();
+    Collections& collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
@@ -255,7 +255,7 @@ ssize_t rgc_count_edges(long id, char const *name) {
 }
 
 ssize_t rgc_size(long id) {
-    Collections collections = get_collections();
+    Collections& collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
