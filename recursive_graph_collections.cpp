@@ -145,23 +145,10 @@ int rgc_first_edge(long id, char const *name, int x) {
 }
 
 int rgc_next_edge(long id, char const *name, int x, int y) {
-    if (name == nullptr) return -1;
+    const Graph* graph = find_graph(id, name);
 
-    Collections collections = get_collections();
-    auto collectionIt = collections.find(id);
-    if (collectionIt == collections.end()) {
-        return -1;
-    }
-
-    auto graphIt = collectionIt->second.find(name);
-    if (graphIt == collectionIt->second.end()) {
-        return -1;
-    }
-
-    const Graph& graph = graphIt->second;
-
-    auto nodeIt = graph.find(x);
-    if (nodeIt == graph.end()) {
+    auto nodeIt = graph->find(x);
+    if (nodeIt == graph->end()) {
         return -1;
     }
 
