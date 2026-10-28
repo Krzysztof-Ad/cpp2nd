@@ -90,7 +90,7 @@ long rgc_new_collection() {
 }
 
 void rgc_delete_collection(long id) {
-
+    get_collections().erase(id);
 }
 
 bool rgc_new_graph(long id, char const *name, int n) {
