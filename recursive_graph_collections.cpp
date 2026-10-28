@@ -70,7 +70,7 @@ namespace {
                   (c >= '0' && c <= '9') ||
                   c == '_')) {
                 return false;
-                  }
+            }
         }
 
         return true;
