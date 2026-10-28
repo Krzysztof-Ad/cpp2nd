@@ -82,12 +82,6 @@ namespace cxx {
 
 extern "C" {
 
-//    Antek
-//      |
-//      |
-//     \|/
-//      `
-
 long rgc_new_collection() {
     static long nextId = 0;
 
@@ -299,14 +293,6 @@ char const * rgc_next_graph(long id, char const *name) {
     return graphIt->first.c_str();
 }
 
-//    Antek
-// =============
-//   Krzysztof
-//      |
-//      |
-//     \|/
-//      `
-
 int rgc_first_node(long id, char const *name) {
     const Graph* graph = find_graph(id, name);
 
@@ -472,8 +458,6 @@ ssize_t rgc_size(long id) {
 
     return collectionIt->second.size();
 }
-//   Krzysztof
-// =============
 }
 
 }
