@@ -28,8 +28,6 @@ namespace {
         return collections;
     }
 
-    // original structure for reference (without 'using' statements)
-    //std::unordered_map<long, std::map<std::string, std::map<int, std::set<std::pair<int, int>>>>> mp;
 }
 
 
