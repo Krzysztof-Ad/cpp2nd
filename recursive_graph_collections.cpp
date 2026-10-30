@@ -365,12 +365,119 @@ int rgc_next_edge(long id, char const *name, int x, int y) {
     return neighborIt->first;
 }
 
-// ==============================
-// Collaboration on this function
-bool rgc_replace_edge(long id, char const *result_name, char const *recipient_name, int w_1, int w_2, char const *donor_name, int v_1, int v_2) {
-    return false;
+bool rgc_replace_edge(long id, char const* result_name, char const* recipient_name, int w_1, int w_2, char const* donor_name, int v_1, int v_2) {
+    if (!valid_graph_name(result_name) ||
+        recipient_name == nullptr || donor_name == nullptr) {
+        return false;
+    }
+
+    auto& collections = get_collections();
+    auto collectionIt = collections.find(id);
+
+    if (collectionIt == collections.end()) {
+        return false;
+    }
+
+    Collection& collection = collectionIt->second;
+
+    if (collection.contains(result_name)) {
+        return false;
+    }
+
+    auto recipientIt = collection.find(recipient_name);
+    auto donorIt = collection.find(donor_name);
+
+    if (recipientIt == collection.end() ||
+        donorIt == collection.end()) {
+        return false;
+    }
+
+    const Graph& recipient = recipientIt->second;
+    const Graph& donor = donorIt->second;
+
+    if (v_1 == v_2 ||
+        !donor.contains(v_1) ||
+        !donor.contains(v_2)) {
+        return false;
+    }
+
+    auto nodeIt = recipient.find(w_1);
+    if (nodeIt == recipient.end()) {
+        return false;
+    }
+
+    auto edgeIt = find_neighbor(nodeIt->second, w_2);
+    if (edgeIt == nodeIt->second.end()) {
+        return false;
+    }
+
+    if (donor.size() - 2 >
+        static_cast<std::size_t>(INT_MAX) - recipient.size()) {
+        return false;
+    }
+
+    EdgeLevel donorLevel = 0;
+    bool donorHasEdges = false;
+
+    for (const auto& node : donor) {
+        for (const auto& neighbor : node.second) {
+            donorHasEdges = true;
+            donorLevel = std::max(donorLevel, neighbor.second);
+        }
+    }
+
+    const EdgeLevel replacedLevel = edgeIt->second;
+
+    const ssize_t addedLevel =
+        std::max(static_cast<ssize_t>(donorLevel),
+                 static_cast<ssize_t>(replacedLevel)) + 1;
+
+    if (donorHasEdges &&
+        (addedLevel >= LEVEL_MAX || addedLevel > INT_MAX)) {
+        return false;
+    }
+
+    Graph result = recipient;
+
+    result.at(w_1).erase({w_2, replacedLevel});
+    result.at(w_2).erase({w_1, replacedLevel});
+
+    std::unordered_map<NodeID, NodeID> vertexMap;
+
+    vertexMap.emplace(v_1, w_1);
+    vertexMap.emplace(v_2, w_2);
+
+    NodeID nextAvailable = 0;
+
+    for (const auto& [donorId, neighbors] : donor) {
+        if (donorId == v_1 || donorId == v_2) {
+            continue;
+        }
+
+        while (result.contains(nextAvailable)) {
+            ++nextAvailable;
+        }
+
+        result.try_emplace(nextAvailable);
+        vertexMap.emplace(donorId, nextAvailable);
+    }
+
+    for (const auto& [donorId, neighbors] : donor) {
+        Neighbors& mappedNeighbors =
+            result.at(vertexMap.at(donorId));
+
+        for (const auto& [neighborId, oldLevel] : neighbors) {
+            mappedNeighbors.emplace(
+                vertexMap.at(neighborId),
+                static_cast<EdgeLevel>(addedLevel)
+            );
+        }
+    }
+
+    collection.try_emplace(std::string(result_name), std::move(result));
+
+    return true;
 }
-// ==============================
 
 ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
     const Graph* graph = find_graph(id, name);
