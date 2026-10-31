@@ -237,6 +237,7 @@ bool rgc_graph_add_edge(long id, char const *name, int x, int y) {
         return false;
     }
 
+    // Store the edge at both endpoints to preserve undirectedness
     nodeX->second.emplace(y, 0);
     nodeY->second.emplace(x, 0);
 
