@@ -33,7 +33,7 @@ namespace {
     Graph* find_graph(long id, char const *name) {
         if (name == nullptr) return nullptr;
 
-        Collections& collections = get_collections();
+        Collections &collections = get_collections();
 
         auto collectionIt = collections.find(id);
         if (collectionIt == collections.end()) {
@@ -48,7 +48,7 @@ namespace {
         return &graphIt->second;
     }
 
-    auto find_neighbor(const Neighbors& neighbors, NodeID id) {
+    auto find_neighbor(const Neighbors &neighbors, NodeID id) {
         auto neighborIt = neighbors.lower_bound({id, 0});
 
         if (neighborIt != neighbors.end() && neighborIt->first == id) {
@@ -58,7 +58,7 @@ namespace {
         return neighbors.end();
     }
 
-    bool valid_graph_name(char const* name) {
+    bool valid_graph_name(char const *name) {
         if (name == nullptr || *name == '\0') {
             return false;
         }
@@ -107,7 +107,7 @@ void rgc_delete_collection(long id) {
     get_collections().erase(id);
 }
 
-bool rgc_new_graph(long id, char const* name, int n) {
+bool rgc_new_graph(long id, char const *name, int n) {
     if (n < 0 || !valid_graph_name(name)) {
         return false;
     }
@@ -140,7 +140,7 @@ void rgc_delete_graph(long id, char const *name) {
         return;
     }
 
-    auto& collections = get_collections();
+    auto &collections = get_collections();
 
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
@@ -151,7 +151,7 @@ void rgc_delete_graph(long id, char const *name) {
 }
 
 int rgc_graph_new_node(long id, char const *name) {
-    Graph* graph = find_graph(id, name);
+    Graph *graph = find_graph(id, name);
 
     if (graph == nullptr || graph->size() >= INT_MAX) {
         return -1;
@@ -159,7 +159,7 @@ int rgc_graph_new_node(long id, char const *name) {
 
     NodeID mex = 0;
 
-    for (const auto& node : *graph) {
+    for (const auto &node : *graph) {
         if (node.first != mex) {
             break;
         }
@@ -182,7 +182,7 @@ bool rgc_graph_delete_node(long id, char const *name, int x) {
         return false;
     }
 
-    for (const auto& [neighborId, level] : nodeIt->second) {
+    for (const auto &[neighborId, level] : nodeIt->second) {
         auto neighborIt = graph->find(neighborId);
         neighborIt->second.erase({x, level});
     }
@@ -255,7 +255,7 @@ bool rgc_graph_delete_edge(long id, char const *name, int x, int y) {
 }
 
 char const * rgc_first_graph(long id) {
-    const auto& collections = get_collections();
+    const auto &collections = get_collections();
 
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end() ||
@@ -271,7 +271,7 @@ char const * rgc_next_graph(long id, char const *name) {
         return nullptr;
     }
 
-    const auto& collections = get_collections();
+    const auto &collections = get_collections();
 
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
@@ -305,7 +305,7 @@ int rgc_first_node(long id, char const *name) {
 }
 
 int rgc_next_node(long id, char const *name, int x) {
-    const Graph* graph = find_graph(id, name);
+    const Graph *graph = find_graph(id, name);
 
     if (graph == nullptr) {
         return -1;
@@ -320,7 +320,7 @@ int rgc_next_node(long id, char const *name, int x) {
 }
 
 int rgc_first_edge(long id, char const *name, int x) {
-    const Graph* graph = find_graph(id, name);
+    const Graph *graph = find_graph(id, name);
 
     if (graph == nullptr) {
         return -1;
@@ -341,7 +341,7 @@ int rgc_first_edge(long id, char const *name, int x) {
 }
 
 int rgc_next_edge(long id, char const *name, int x, int y) {
-    const Graph* graph = find_graph(id, name);
+    const Graph *graph = find_graph(id, name);
 
     if (graph == nullptr) {
         return -1;
@@ -352,7 +352,7 @@ int rgc_next_edge(long id, char const *name, int x, int y) {
         return -1;
     }
 
-    const Neighbors& neighbors = nodeIt->second;
+    const Neighbors &neighbors = nodeIt->second;
 
     // Why does {y, LEVEL_MAX - 1} work? Because upper_bound searches
     // lexicographically through the set, so it will always find
@@ -366,13 +366,13 @@ int rgc_next_edge(long id, char const *name, int x, int y) {
     return neighborIt->first;
 }
 
-bool rgc_replace_edge(long id, char const* result_name, char const* recipient_name, int w_1, int w_2, char const* donor_name, int v_1, int v_2) {
+bool rgc_replace_edge(long id, char const *result_name, char const *recipient_name, int w_1, int w_2, char const *donor_name, int v_1, int v_2) {
     if (!valid_graph_name(result_name) ||
         recipient_name == nullptr || donor_name == nullptr) {
         return false;
     }
 
-    auto& collections = get_collections();
+    auto &collections = get_collections();
     auto collectionIt = collections.find(id);
 
     if (collectionIt == collections.end()) {
@@ -393,8 +393,8 @@ bool rgc_replace_edge(long id, char const* result_name, char const* recipient_na
         return false;
     }
 
-    const Graph& recipient = recipientIt->second;
-    const Graph& donor = donorIt->second;
+    const Graph &recipient = recipientIt->second;
+    const Graph &donor = donorIt->second;
 
     if (v_1 == v_2 ||
         !donor.contains(v_1) ||
@@ -420,8 +420,8 @@ bool rgc_replace_edge(long id, char const* result_name, char const* recipient_na
     EdgeLevel donorLevel = 0;
     bool donorHasEdges = false;
 
-    for (const auto& node : donor) {
-        for (const auto& neighbor : node.second) {
+    for (const auto &node : donor) {
+        for (const auto &neighbor : node.second) {
             donorHasEdges = true;
             donorLevel = std::max(donorLevel, neighbor.second);
         }
@@ -450,7 +450,7 @@ bool rgc_replace_edge(long id, char const* result_name, char const* recipient_na
 
     NodeID nextAvailable = 0;
 
-    for (const auto& [donorId, neighbors] : donor) {
+    for (const auto &[donorId, neighbors] : donor) {
         if (donorId == v_1 || donorId == v_2) {
             continue;
         }
@@ -463,11 +463,11 @@ bool rgc_replace_edge(long id, char const* result_name, char const* recipient_na
         vertexMap.emplace(donorId, nextAvailable);
     }
 
-    for (const auto& [donorId, neighbors] : donor) {
+    for (const auto &[donorId, neighbors] : donor) {
         Neighbors& mappedNeighbors =
             result.at(vertexMap.at(donorId));
 
-        for (const auto& [neighborId, oldLevel] : neighbors) {
+        for (const auto &[neighborId, oldLevel] : neighbors) {
             mappedNeighbors.emplace(
                 vertexMap.at(neighborId),
                 static_cast<EdgeLevel>(addedLevel)
@@ -481,7 +481,7 @@ bool rgc_replace_edge(long id, char const* result_name, char const* recipient_na
 }
 
 ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
-    const Graph* graph = find_graph(id, name);
+    const Graph *graph = find_graph(id, name);
 
     if (graph == nullptr) {
         return -1;
@@ -503,7 +503,7 @@ ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
 }
 
 ssize_t rgc_graph_level(long id, char const *name) {
-    const Graph* graph = find_graph(id, name);
+    const Graph *graph = find_graph(id, name);
 
     if (graph == nullptr) {
         return -1;
@@ -530,7 +530,7 @@ ssize_t rgc_max_level() {
 }
 
 ssize_t rgc_count_nodes(long id, char const *name) {
-    const Graph* graph = find_graph(id, name);
+    const Graph *graph = find_graph(id, name);
 
     if (graph == nullptr) {
         return -1;
@@ -540,7 +540,7 @@ ssize_t rgc_count_nodes(long id, char const *name) {
 }
 
 ssize_t rgc_count_edges(long id, char const *name) {
-    const Graph* graph = find_graph(id, name);
+    const Graph *graph = find_graph(id, name);
 
     if (graph == nullptr) {
         return -1;
@@ -549,7 +549,7 @@ ssize_t rgc_count_edges(long id, char const *name) {
     auto nodeIt = graph->begin();
     ssize_t degreeSum = 0;
     while (nodeIt != graph->end()) {
-        const Neighbors& neighbors = nodeIt->second;
+        const Neighbors &neighbors = nodeIt->second;
         degreeSum += neighbors.size();
         ++nodeIt;
     }
@@ -558,7 +558,7 @@ ssize_t rgc_count_edges(long id, char const *name) {
 }
 
 ssize_t rgc_size(long id) {
-    Collections& collections = get_collections();
+    Collections &collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
