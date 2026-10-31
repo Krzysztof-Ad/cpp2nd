@@ -36,7 +36,7 @@ namespace {
     // Returns
     // 1) pointer to the graph
     // 2) nullptr if it does not exist or the provided name is null
-    Graph* find_graph(long id, char const *name) {
+    Graph *find_graph(long id, char const *name) {
         if (name == nullptr) return nullptr;
 
         Collections &collections = get_collections();
@@ -191,7 +191,7 @@ int rgc_graph_new_node(long id, char const *name) {
 
 // Removes a node and all its incident edges without renumbering nodes
 bool rgc_graph_delete_node(long id, char const *name, int x) {
-    Graph* graph = find_graph(id, name);
+    Graph *graph = find_graph(id, name);
     if (graph == nullptr) {
         return false;
     }
@@ -219,7 +219,7 @@ bool rgc_graph_add_edge(long id, char const *name, int x, int y) {
         return false;
     }
 
-    Graph* graph = find_graph(id, name);
+    Graph *graph = find_graph(id, name);
     if (graph == nullptr) {
         return false;
     }
@@ -249,7 +249,7 @@ bool rgc_graph_delete_edge(long id, char const *name, int x, int y) {
         return false;
     }
 
-    Graph* graph = find_graph(id, name);
+    Graph *graph = find_graph(id, name);
     if (graph == nullptr) {
         return false;
     }
@@ -277,7 +277,7 @@ bool rgc_graph_delete_edge(long id, char const *name, int x, int y) {
     return true;
 }
 
-char const * rgc_first_graph(long id) {
+char const *rgc_first_graph(long id) {
     const auto &collections = get_collections();
 
     auto collectionIt = collections.find(id);
@@ -289,7 +289,7 @@ char const * rgc_first_graph(long id) {
     return collectionIt->second.begin()->first.c_str();
 }
 
-char const * rgc_next_graph(long id, char const *name) {
+char const *rgc_next_graph(long id, char const *name) {
     if (name == nullptr) {
         return nullptr;
     }
@@ -318,7 +318,7 @@ char const * rgc_next_graph(long id, char const *name) {
 }
 
 int rgc_first_node(long id, char const *name) {
-    const Graph* graph = find_graph(id, name);
+    const Graph *graph = find_graph(id, name);
 
     if (graph == nullptr || graph->empty()) {
         return -1;
