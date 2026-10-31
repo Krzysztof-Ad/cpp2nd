@@ -581,6 +581,8 @@ ssize_t rgc_count_edges(long id, char const *name) {
         ++nodeIt;
     }
 
+    // Each undirected edge is counted twice in the adjacency sets
+    // so the total degree sum must be divided by two
     return degreeSum / 2;
 }
 
