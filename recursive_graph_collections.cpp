@@ -597,7 +597,7 @@ ssize_t rgc_count_edges(long id, char const *name) {
     }
 
     auto nodeIt = graph->begin();
-    ssize_t degreeSum = 0;
+    std::size_t degreeSum = 0;
     while (nodeIt != graph->end()) {
         const Neighbors &neighbors = nodeIt->second;
         degreeSum += neighbors.size();
