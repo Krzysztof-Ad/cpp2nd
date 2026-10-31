@@ -201,6 +201,8 @@ bool rgc_graph_delete_node(long id, char const *name, int x) {
         return false;
     }
 
+    // Remove the reverse adjacency entries from all neighboring nodes;
+    // The node itself is removed only after these edges are deleted
     for (const auto &[neighborId, level] : nodeIt->second) {
         auto neighborIt = graph->find(neighborId);
         neighborIt->second.erase({x, level});
