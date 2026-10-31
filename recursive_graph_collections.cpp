@@ -13,7 +13,7 @@
 #define LEVEL_MAX 4
 #endif
 
-// anonymous namespace for private helpers and data structures
+// Anonymous namespace for private helpers and data structures
 namespace {
     // We define our data structures using STL containers;
     // each undirected edge is stored twice, once for each endpoint;
