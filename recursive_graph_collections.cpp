@@ -389,10 +389,16 @@ int rgc_next_edge(long id, char const *name, int x, int y) {
     return neighborIt->first;
 }
 
+// rgc_replace_edge creates a new graph by replacing an edge
+// of the recipient with a donor graph;
+// The original graphs remain unchanged and the result
+// is stored as a new named graph in the collection
 bool rgc_replace_edge(long id, char const *result_name,
     char const *recipient_name, int w_1, int w_2,
     char const *donor_name, int v_1, int v_2) {
 
+    // Validate the provided names graphs and selected vertices
+    // before making any changes to the collection
     if (!valid_graph_name(result_name) ||
         recipient_name == nullptr || donor_name == nullptr) {
         return false;
@@ -438,11 +444,16 @@ bool rgc_replace_edge(long id, char const *result_name,
         return false;
     }
 
+    // The donor contributes all its vertices except v_1 and v_2
+    // which are identified with the recipients existing endpoints
     if (donor.size() - 2 >
         static_cast<std::size_t>(INT_MAX) - recipient.size()) {
         return false;
     }
 
+    // Find the highest edge level in the donor graph;
+    // All transferred edges will receive the same new level
+    // regardless of their individual levels in the donor
     EdgeLevel donorLevel = 0;
     bool donorHasEdges = false;
 
@@ -459,23 +470,33 @@ bool rgc_replace_edge(long id, char const *result_name,
         std::max(static_cast<ssize_t>(donorLevel),
                  static_cast<ssize_t>(replacedLevel)) + 1;
 
+    // An edgeless donor introduces no new edges so the calculated
+    // addedLevel does not affect the resulting graph in that case
     if (donorHasEdges &&
         (addedLevel >= LEVEL_MAX || addedLevel > INT_MAX)) {
         return false;
     }
 
+    // Create an independent copy of the recipient;
+    // Remove the selected edge without modifying the original graph
     Graph result = recipient;
 
     result.at(w_1).erase({w_2, replacedLevel});
     result.at(w_2).erase({w_1, replacedLevel});
 
+    // Map donor vertex ids to the corresponding result vertex ids;
+    // The selected donor endpoints are identified with w_1 and w_2
     std::unordered_map<NodeID, NodeID> vertexMap;
 
     vertexMap.emplace(v_1, w_1);
     vertexMap.emplace(v_2, w_2);
 
+    // Assign the smallest available ids to the remaining donor vertices;
+    // Iterating over std::map preserves their original ascending order
     NodeID nextAvailable = 0;
 
+    // Transfer donor edges using the new vertex ids and addedLevel;
+    // Each adjacency entry is copied preserving edge symmetry
     for (const auto &[donorId, neighbors] : donor) {
         if (donorId == v_1 || donorId == v_2) {
             continue;
@@ -501,6 +522,8 @@ bool rgc_replace_edge(long id, char const *result_name,
         }
     }
 
+    // Insert the completed graph into the collection;
+    // No original graph has been modified during construction
     collection.try_emplace(std::string(result_name), std::move(result));
 
     return true;
