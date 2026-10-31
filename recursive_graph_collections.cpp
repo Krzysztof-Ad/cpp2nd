@@ -15,6 +15,9 @@
 
 // anonymous namespace for private helpers and data structures
 namespace {
+    // We define our data structures using STL containers;
+    // each undirected edge is stored twice, once for each endpoint;
+    // neighbor is represented as a pair of (node ID, edge level)
     using NodeID = int;
     using EdgeLevel = int;
     using Neighbor = std::pair<NodeID, EdgeLevel>;
