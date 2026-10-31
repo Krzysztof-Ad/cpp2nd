@@ -27,7 +27,7 @@ namespace {
     using Collections = std::unordered_map<long, Collection>;
 
     // get_collections returns a reference to all existing collections
-    Collections& get_collections() {
+    Collections &get_collections() {
         static Collections collections;
         return collections;
     }
@@ -126,7 +126,7 @@ bool rgc_new_graph(long id, char const *name, int n) {
         return false;
     }
 
-    Collections& collections = get_collections();
+    Collections &collections = get_collections();
 
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
@@ -140,7 +140,7 @@ bool rgc_new_graph(long id, char const *name, int n) {
         return false;
     }
 
-    Graph& graph = graphIt->second;
+    Graph &graph = graphIt->second;
 
     for (int i = 0; i < n; ++i) {
         graph.try_emplace(i);
@@ -231,7 +231,7 @@ bool rgc_graph_add_edge(long id, char const *name, int x, int y) {
         return false;
     }
 
-    const Neighbors& neighbors = nodeX->second;
+    const Neighbors &neighbors = nodeX->second;
 
     if (find_neighbor(neighbors, y) != neighbors.end()) {
         return false;
@@ -301,7 +301,7 @@ char const *rgc_next_graph(long id, char const *name) {
         return nullptr;
     }
 
-    const Collection& collection = collectionIt->second;
+    const Collection &collection = collectionIt->second;
 
     auto graphIt = collection.find(name);
     if (graphIt == collection.end()) {
@@ -354,7 +354,7 @@ int rgc_first_edge(long id, char const *name, int x) {
         return -1;
     }
 
-    const Neighbors& neighbors = nodeIt->second;
+    const Neighbors &neighbors = nodeIt->second;
 
     if (neighbors.empty()) {
         return -1;
@@ -411,7 +411,7 @@ bool rgc_replace_edge(long id, char const *result_name,
         return false;
     }
 
-    Collection& collection = collectionIt->second;
+    Collection &collection = collectionIt->second;
 
     if (collection.contains(result_name)) {
         return false;
@@ -511,7 +511,7 @@ bool rgc_replace_edge(long id, char const *result_name,
     // Transfer donor edges using the new vertex ids and addedLevel;
     // Each adjacency entry is copied preserving edge symmetry
     for (const auto &[donorId, neighbors] : donor) {
-        Neighbors& mappedNeighbors =
+        Neighbors &mappedNeighbors =
             result.at(vertexMap.at(donorId));
 
         for (const auto &[neighborId, oldLevel] : neighbors) {
@@ -541,7 +541,7 @@ ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
         return -1;
     }
 
-    const Neighbors& neighbors = nodeIt->second;
+    const Neighbors &neighbors = nodeIt->second;
     auto neighborIt = find_neighbor(neighbors, y);
 
     if (neighborIt == neighbors.end()) {
@@ -563,7 +563,7 @@ ssize_t rgc_graph_level(long id, char const *name) {
     auto nodeIt = graph->begin();
 
     while (nodeIt != graph->end()) {
-        const Neighbors& neighbors = nodeIt->second;
+        const Neighbors &neighbors = nodeIt->second;
         auto neighborIt = neighbors.begin();
         while (neighborIt != neighbors.end()) {
             maxLevel = std::max(maxLevel, neighborIt->second);
