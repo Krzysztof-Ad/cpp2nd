@@ -26,8 +26,7 @@ namespace {
     using Collection = std::map<std::string, Graph>;
     using Collections = std::unordered_map<long, Collection>;
 
-    // our basic structure for the exercise;
-    // we use getter instead of global initialization
+    // get_collections returns a reference to all existing collections
     Collections& get_collections() {
         static Collections collections;
         return collections;
