@@ -548,7 +548,7 @@ ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
         return -1;
     }
 
-    return neighborIt->second;
+    return static_cast<ssize_t>(neighborIt->second);
 }
 
 // Returns the highest edge level or 0 if the graph has no edges
@@ -572,11 +572,11 @@ ssize_t rgc_graph_level(long id, char const *name) {
         ++nodeIt;
     }
 
-    return maxLevel;
+    return static_cast<ssize_t>(maxLevel);
 }
 
 ssize_t rgc_max_level() {
-    return LEVEL_MAX - 1;
+    return static_cast<ssize_t>(LEVEL_MAX - 1);
 }
 
 ssize_t rgc_count_nodes(long id, char const *name) {
@@ -586,7 +586,7 @@ ssize_t rgc_count_nodes(long id, char const *name) {
         return -1;
     }
 
-    return graph->size();
+    return static_cast<ssize_t>(graph->size());
 }
 
 ssize_t rgc_count_edges(long id, char const *name) {
@@ -606,7 +606,7 @@ ssize_t rgc_count_edges(long id, char const *name) {
 
     // Each undirected edge is counted twice in the adjacency sets
     // so the total degree sum must be divided by two
-    return degreeSum / 2;
+    return static_cast<ssize_t>(degreeSum / 2);
 }
 
 ssize_t rgc_size(long id) {
@@ -616,7 +616,7 @@ ssize_t rgc_size(long id) {
         return -1;
     }
 
-    return collectionIt->second.size();
+    return static_cast<ssize_t>(collectionIt->second.size());
 }
 }
 
