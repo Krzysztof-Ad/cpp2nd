@@ -172,6 +172,9 @@ int rgc_graph_new_node(long id, char const *name) {
         return -1;
     }
 
+    // Find the minimum excluded node id (MEX);
+    // Graph is ordered by node ids so the first missing id
+    // can be found by iterating from the beginning
     NodeID mex = 0;
 
     for (const auto &node : *graph) {
