@@ -610,7 +610,7 @@ ssize_t rgc_count_edges(long id, char const *name) {
 }
 
 ssize_t rgc_size(long id) {
-    Collections &collections = get_collections();
+    const Collections &collections = get_collections();
     auto collectionIt = collections.find(id);
     if (collectionIt == collections.end()) {
         return -1;
