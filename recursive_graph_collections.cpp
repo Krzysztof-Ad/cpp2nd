@@ -261,7 +261,7 @@ char const * rgc_first_graph(long id) {
     if (collectionIt == collections.end() ||
         collectionIt->second.empty()) {
         return nullptr;
-        }
+    }
 
     return collectionIt->second.begin()->first.c_str();
 }
