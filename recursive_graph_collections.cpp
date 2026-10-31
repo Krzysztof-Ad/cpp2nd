@@ -67,6 +67,9 @@ namespace {
         return neighbors.end();
     }
 
+    // valid_graph_name checks if name follows the project rules;
+    // Valid names are non-empty and contain only ASCII letters
+    // digits and underscores
     bool valid_graph_name(char const *name) {
         if (name == nullptr || *name == '\0') {
             return false;
