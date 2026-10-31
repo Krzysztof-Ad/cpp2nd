@@ -7,6 +7,7 @@
 #include <utility>
 #include <algorithm>
 #include <climits>
+#include <cstddef>
 
 #ifndef LEVEL_MAX
 #define LEVEL_MAX 4
