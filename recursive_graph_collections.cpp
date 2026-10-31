@@ -95,6 +95,7 @@ namespace cxx {
 
 extern "C" {
 
+// Collection ids are assigned sequentially and never reused
 long rgc_new_collection() {
     static long nextId = 0;
 
@@ -119,6 +120,7 @@ void rgc_delete_collection(long id) {
     get_collections().erase(id);
 }
 
+// Creates a named graph with n isolated vertices numbered from 0
 bool rgc_new_graph(long id, char const *name, int n) {
     if (n < 0 || !valid_graph_name(name)) {
         return false;
@@ -162,6 +164,7 @@ void rgc_delete_graph(long id, char const *name) {
     collectionIt->second.erase(name);
 }
 
+// Adds an isolated node with the smallest unused non-negative id
 int rgc_graph_new_node(long id, char const *name) {
     Graph *graph = find_graph(id, name);
 
@@ -183,6 +186,7 @@ int rgc_graph_new_node(long id, char const *name) {
     return mex;
 }
 
+// Removes a node and all its incident edges without renumbering nodes
 bool rgc_graph_delete_node(long id, char const *name, int x) {
     Graph* graph = find_graph(id, name);
     if (graph == nullptr) {
@@ -204,6 +208,7 @@ bool rgc_graph_delete_node(long id, char const *name, int x) {
     return true;
 }
 
+// Adds an undirected edge with level 0 if both endpoints are valid
 bool rgc_graph_add_edge(long id, char const *name, int x, int y) {
     if (x == y) {
         return false;
@@ -517,6 +522,7 @@ ssize_t rgc_edge_level(long id, char const *name, int x, int y) {
     return neighborIt->second;
 }
 
+// Returns the highest edge level or 0 if the graph has no edges
 ssize_t rgc_graph_level(long id, char const *name) {
     const Graph *graph = find_graph(id, name);
 
