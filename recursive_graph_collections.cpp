@@ -366,7 +366,10 @@ int rgc_next_edge(long id, char const *name, int x, int y) {
     return neighborIt->first;
 }
 
-bool rgc_replace_edge(long id, char const *result_name, char const *recipient_name, int w_1, int w_2, char const *donor_name, int v_1, int v_2) {
+bool rgc_replace_edge(long id, char const *result_name,
+    char const *recipient_name, int w_1, int w_2,
+    char const *donor_name, int v_1, int v_2) {
+
     if (!valid_graph_name(result_name) ||
         recipient_name == nullptr || donor_name == nullptr) {
         return false;
