@@ -495,8 +495,6 @@ bool rgc_replace_edge(long id, char const *result_name,
     // Iterating over std::map preserves their original ascending order
     NodeID nextAvailable = 0;
 
-    // Transfer donor edges using the new vertex ids and addedLevel;
-    // Each adjacency entry is copied preserving edge symmetry
     for (const auto &[donorId, neighbors] : donor) {
         if (donorId == v_1 || donorId == v_2) {
             continue;
@@ -510,6 +508,8 @@ bool rgc_replace_edge(long id, char const *result_name,
         vertexMap.emplace(donorId, nextAvailable);
     }
 
+    // Transfer donor edges using the new vertex ids and addedLevel;
+    // Each adjacency entry is copied preserving edge symmetry
     for (const auto &[donorId, neighbors] : donor) {
         Neighbors& mappedNeighbors =
             result.at(vertexMap.at(donorId));
