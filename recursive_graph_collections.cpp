@@ -54,6 +54,9 @@ namespace {
         return &graphIt->second;
     }
 
+    // find_neighbor searches for a neighbor with the given node id;
+    // Because edge levels are non-negative lower_bound({id, 0}) finds
+    // the first possible entry for this neighbor regardless of its level
     auto find_neighbor(const Neighbors &neighbors, NodeID id) {
         auto neighborIt = neighbors.lower_bound({id, 0});
 
