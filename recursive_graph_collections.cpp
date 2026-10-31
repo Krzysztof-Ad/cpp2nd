@@ -32,6 +32,10 @@ namespace {
         return collections;
     }
 
+    // find_graph searches for a graph in the collection with the given id;
+    // Returns
+    // 1) pointer to the graph
+    // 2) nullptr if it does not exist or the provided name is null
     Graph* find_graph(long id, char const *name) {
         if (name == nullptr) return nullptr;
 
